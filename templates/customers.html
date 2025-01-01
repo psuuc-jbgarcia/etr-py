@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management</title>
+</head>
+<body>
+    <h1>Welcome, {{ name }}!</h1>
+    <p>Your role: {{ role }}</p>
+
+    <h2>Customer Management</h2>
+    <a href="/customer/add">Add New Customer</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Account Status</th>
+                <th>Registration Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer[1] }}</td>
+                <td>{{ customer[2] }}</td>
+                <td>{{ customer[3] }}</td>
+                <td>{{ customer[4] }}</td>
+                <td>{{ customer[5] }}</td>
+                <td>{{ customer[6] }}</td>
+                <td>
+                    <a href="/customer/edit/{{ customer[0] }}">Edit</a>
+                    <a href="/customer/delete/{{ customer[0] }}" onclick="return confirm('Are you sure you want to delete this customer?')">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/home">Back to Home</a>
+</body>
+</html>

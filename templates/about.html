@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+</head>
+<body>
+    <h1>About Page</h1>
+    <p>Welcome, {{ name }}!</p>
+    <p>Your role is: {{ role }}</p>
+
+    <h2>User Information</h2>
+    <table>
+        <tr>
+            <th>First Name</th>
+            <td>{{ user[1] }}</td>
+        </tr>
+        <tr>
+            <th>Last Name</th>
+            <td>{{ user[2] }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user[3] }}</td>
+        </tr>
+        <tr>
+            <th>Phone Number</th>
+            <td>{{ user[4] }}</td>
+        </tr>
+        <tr>
+            <th>Address</th>
+            <td>{{ user[5] }}</td>
+        </tr>
+    </table>
+
+    <p>This page provides information about the application and its purpose.</p>
+
+    <nav>
+        <a href="/home">Home</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</body>
+</html>

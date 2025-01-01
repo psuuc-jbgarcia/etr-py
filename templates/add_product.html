@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+</head>
+<body>
+    <h1>Welcome, {{ name }}!</h1>
+    <p>Your role: {{ role }}</p>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="/home">Home</a>
+        {% if role == 'regular' %}
+            <a href="/products">Products Management</a>
+        {% elif role == 'admin' %}
+            <a href="/customers">Customer Management</a>
+        {% endif %}
+        <a href="/about">About</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <h2>Add Product</h2>
+
+    <form method="POST">
+        <label for="name">Product Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="price">Price:</label><br>
+        <input type="text" id="price" name="price" required><br><br>
+
+        <label for="stock">Stock:</label><br>
+        <input type="text" id="stock" name="stock" required><br><br>
+
+        <label for="category">Category:</label><br>
+        <input type="text" id="category" name="category" required><br><br>
+
+        <label for="status">Status:</label><br>
+        <select id="status" name="status" required>
+            <option value="Available">Available</option>
+            <option value="Out of Stock">Out of Stock</option>
+            <option value="Low Stock">Low Stock</option>
+        </select><br><br>
+
+        <button type="submit">Add Product</button>
+    </form>
+
+    <a href="/products">Back to Products</a>
+</body>
+</html>

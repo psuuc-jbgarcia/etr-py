@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+</head>
+<body>
+    <h1>Welcome, {{ name }}!</h1>
+    <p>Your role: {{ role }}</p>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="/home">Home</a>
+        {% if role == 'regular' %}
+            <a href="/products">Products Management</a>
+        {% elif role == 'admin' %}
+            <a href="/customers">Customer Management</a>
+        {% endif %}
+        <a href="/about">About</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <h2>Edit Product</h2>
+
+    <form method="POST">
+        <input type="hidden" name="id" value="{{ product[0] }}">  <!-- Assuming product[0] is the product ID -->
+
+        <label for="name">Product Name:</label><br>
+        <input type="text" id="name" name="name" value="{{ product[1] }}" required><br><br>  <!-- Assuming product[1] is the name -->
+
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" required>{{ product[2] }}</textarea><br><br>  <!-- Assuming product[2] is the description -->
+
+        <label for="price">Price:</label><br>
+        <input type="text" id="price" name="price" value="{{ product[3] }}" required><br><br>  <!-- Assuming product[3] is the price -->
+
+        <label for="stock">Stock:</label><br>
+        <input type="text" id="stock" name="stock" value="{{ product[4] }}" required><br><br>  <!-- Assuming product[4] is the stock -->
+
+        <label for="category">Category:</label><br>
+        <input type="text" id="category" name="category" value="{{ product[5] }}" required><br><br>  <!-- Assuming product[5] is the category -->
+
+        <label for="status">Status:</label><br>
+        <select id="status" name="status" required>
+            <option value="Available" {% if product[6] == 'Available' %}selected{% endif %}>Available</option>
+            <option value="Out of Stock" {% if product[6] == 'Out of Stock' %}selected{% endif %}>Out of Stock</option>
+            <option value="Low Stock" {% if product[6] == 'Low Stock' %}selected{% endif %}>Low Stock</option>
+        </select><br><br>  <!-- Assuming product[6] is the status -->
+
+        <button type="submit">Update Product</button>
+    </form>
+
+    <a href="/products">Back to Products</a>
+</body>
+</html>

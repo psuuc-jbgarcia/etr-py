@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome, {{ name }}!</h1>
+    <p>Your role: {{ role }}</p>
+
+    <nav>
+        <a href="/home">Home</a>
+        {% if role == 'regular' %}
+            <a href="/products">Products Management</a>
+        {% elif role == 'admin' %}
+            <a href="/customers">Customer Management</a>
+        {% endif %}
+        <a href="/about">About</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="alert alert-{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
