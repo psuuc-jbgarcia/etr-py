@@ -3,7 +3,7 @@ from flask_mysqldb import MySQL
 import random
 
 app = Flask(__name__)
-app.secret_key = str(random.randint(1000000000, 9999999999))  # Random 10-digit number
+app.secret_key = "yoursecretkey" # Random 10-digit number
 
 # Database configuration
 app.config['MYSQL_HOST'] = 'localhost'
@@ -85,7 +85,7 @@ def products():
     products_list = cursor.fetchall()
     cursor.close()
 
-    return render_template('products.html', products=products_list)
+    return render_template('products.html', products=products_list, name=session['name'], role=session['role'])
 
 @app.route('/product/add', methods=['GET', 'POST'])
 def add_product():

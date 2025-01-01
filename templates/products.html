@@ -4,71 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products Management</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 CDN -->
+    <style>
+        /* Custom styling for navbar */
+        nav {
+            background-color: #212529; /* Black navbar */
+        }
+        nav a {
+            color: white;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #ffc107; /* Hover effect */
+        }
+
+        /* Table styling */
+        table th {
+            background-color: #007bff;
+            color: white;
+        }
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Add New Product Button */
+        .btn-add {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-add:hover {
+            background-color: #0056b3;
+        }
+
+        /* Flash message styling */
+        .alert {
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome, {{ name }}!</h1>
-        <p>Your role: {{ role }}</p>
-    </header>
-    
-    <!-- Navigation menu -->
-    <nav>
-        <a href="{{ url_for('home') }}">Home</a>
-        {% if role == 'regular' %}
-            <a href="{{ url_for('products') }}">Products Management</a>
-        {% elif role == 'admin' %}
-            <a href="{{ url_for('customers') }}">Customer Management</a>
-        {% endif %}
-        <a href="{{ url_for('about') }}">About</a>
-        <a href="{{ url_for('logout') }}">Logout</a>
-    </nav>
 
-    <!-- Display flash messages -->
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">MyApp</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home">Home</a>
+                    </li>
+                    {% if role == 'regular' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/products">Products Management</a>
+                        </li>
+                    {% elif role == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/customers">Customer Management</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul>
-                {% for category, message in messages %}
-                    <li class="alert alert-{{ category }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+    {% if messages %}
+        <script>
+            // Create a list of messages for each category
+            const flashMessages = {{ messages | tojson }};
+            flashMessages.forEach(([category, message]) => {
+                Swal.fire({
+                    icon: category,  // Category directly passed
+                    title: category.charAt(0).toUpperCase() + category.slice(1),  // Capitalizing the category
+                    text: message,  // Message content
+                    timer: 3000  // Auto close after 3 seconds
+                });
+            });
+        </script>
+    {% endif %}
+{% endwith %}
+
 
     <!-- Content section -->
-    <h2>Manage Products</h2>
-    <a href="{{ url_for('add_product') }}">Add New Product</a>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Category</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for product in products %}
-            <tr>
-                <td>{{ product[0] }}</td>
-                <td>{{ product[1] }}</td>
-                <td>{{ product[2] }}</td>
-                <td>{{ product[3] }}</td>
-                <td>{{ product[4] }}</td>
-                <td>{{ product[5] }}</td>
-                <td>{{ product[6] }}</td>
-                <td>
-                    <a href="{{ url_for('edit_product', id=product[0]) }}">Edit</a> |
-                    <a href="{{ url_for('delete_product', id=product[0]) }}">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container mt-4">
+        <h2>Manage Products</h2>
+        <a href="{{ url_for('add_product') }}" class="btn btn-add mb-3">Add New Product</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product[0] }}</td>
+                    <td>{{ product[1] }}</td>
+                    <td>{{ product[2] }}</td>
+                    <td>{{ product[3] }}</td>
+                    <td>{{ product[4] }}</td>
+                    <td>{{ product[5] }}</td>
+                    <td>{{ product[6] }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_product', id=product[0]) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <!-- Trigger Modal for Delete -->
+                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-product-id="{{ product[0] }}" data-product-name="{{ product[1] }}">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete the product <span id="productName"></span>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="#" id="deleteLink" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 MyApp. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Handle modal data
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; 
+            const productId = button.getAttribute('data-product-id');
+            const productName = button.getAttribute('data-product-name');
+
+            // Set product name in modal
+            const productNameElement = document.getElementById('productName');
+            productNameElement.textContent = productName;
+
+            // Set delete link
+            const deleteLink = document.getElementById('deleteLink');
+            deleteLink.href = `/product/delete/${productId}`;
+        });
+    </script>
 </body>
 </html>
