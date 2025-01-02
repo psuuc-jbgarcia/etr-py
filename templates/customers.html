@@ -19,9 +19,26 @@
             color: #ffc107; /* Hover effect */
         }
 
+        /* Body and layout */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
         /* Main section */
         .main-content {
-            min-height: 70vh; /* Set minimum height to 70vh */
+            flex-grow: 1;
+            padding: 40px 15px;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
         }
 
         /* Footer styling */
@@ -30,7 +47,21 @@
             color: white;
             text-align: center;
             padding: 15px;
-            margin-top: 30px;
+        }
+
+        /* Table styling */
+        .table thead {
+            background-color: #007bff;
+            color: white;
+        }
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .badge-success {
+            background-color: #28a745;
+        }
+        .badge-danger {
+            background-color: #dc3545;
         }
     </style>
 </head>
@@ -50,11 +81,11 @@
                     </li>
                     {% if role == 'regular' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/products">Products Management</a>
+                            <a class="nav-link" href="/products">Management</a>
                         </li>
                     {% elif role == 'admin' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/customers">Customer Management</a>
+                            <a class="nav-link" href="/customers">Management</a>
                         </li>
                     {% endif %}
                     <li class="nav-item">
@@ -69,16 +100,15 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container mt-5 main-content">
+    <div class="container main-content">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="text-primary">Customer Management</h2>
-            <a href="/customer/add" class="btn btn-success">Add New Customer</a>
+            <a href="/customer/add" class="btn btn-custom">Add New Customer</a>
         </div>
 
         <!-- Customer Table -->
         <div class="table-responsive">
-            <table class="table table-bordered table-hover table-striped">
-                <thead class="table-dark">
+            <table class="table table-bordered table-hover">
+                <thead>
                     <tr>
                         <th>Full Name</th>
                         <th>Email</th>
@@ -97,7 +127,7 @@
                         <td>{{ customer[3] }}</td>
                         <td>{{ customer[4] }}</td>
                         <td>
-                            <span class="badge {{ 'bg-success' if customer[5] == 'Active' else 'bg-danger' }}">
+                            <span class="badge {{ 'badge-success' if customer[5] == 'Active' else 'badge-danger' }}">
                                 {{ customer[5] }}
                             </span>
                         </td>

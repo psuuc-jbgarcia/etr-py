@@ -9,7 +9,7 @@
     <style>
         /* Custom styling for navbar */
         nav {
-            background-color: #212529; /* Black navbar */
+            background-color: #212529; /* Dark navbar */
         }
         nav a {
             color: white;
@@ -17,6 +17,19 @@
         }
         nav a:hover {
             color: #ffc107; /* Hover effect */
+        }
+
+        /* Body styling */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            flex: 1; /* Ensures the content section takes available space */
+            padding: 30px 15px;
         }
 
         /* Table styling */
@@ -28,7 +41,6 @@
             background-color: #f1f1f1;
         }
 
-        /* Add New Product Button */
         .btn-add {
             background-color: #007bff;
             color: white;
@@ -38,7 +50,6 @@
             background-color: #0056b3;
         }
 
-        /* Flash message styling */
         .alert {
             font-size: 16px;
             margin-top: 20px;
@@ -51,6 +62,21 @@
             text-align: center;
             padding: 15px;
             margin-top: 30px;
+        }
+
+        /* Styling for action buttons */
+        .btn-action {
+            font-weight: bold;
+        }
+
+        /* Ensure the modal and alert fit with the overall theme */
+        .modal-content {
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            background-color: #007bff;
+            color: white;
         }
     </style>
 </head>
@@ -70,11 +96,11 @@
                     </li>
                     {% if role == 'regular' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/products">Products Management</a>
+                            <a class="nav-link" href="/products">Management</a>
                         </li>
                     {% elif role == 'admin' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/customers">Customer Management</a>
+                            <a class="nav-link" href="/customers">Management</a>
                         </li>
                     {% endif %}
                     <li class="nav-item">
@@ -87,60 +113,64 @@
             </div>
         </div>
     </nav>
+
+    <!-- Flash Message Handling -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         <script>
-            // Create a list of messages for each category
-            const flashMessages = {{ messages | tojson }};
+            // Handle flash messages
+            const flashMessages = messages;
             flashMessages.forEach(([category, message]) => {
                 Swal.fire({
-                    icon: category,  // Category directly passed
-                    title: category.charAt(0).toUpperCase() + category.slice(1),  // Capitalizing the category
-                    text: message,  // Message content
-                    timer: 3000  // Auto close after 3 seconds
+                    icon: category, 
+                    title: category.charAt(0).toUpperCase() + category.slice(1),
+                    text: message,
+                    timer: 3000
                 });
             });
         </script>
     {% endif %}
-{% endwith %}
+    {% endwith %}
 
-
-    <!-- Content section -->
-    <div class="container mt-4">
-        <h2>Manage Products</h2>
-        <a href="{{ url_for('add_product') }}" class="btn btn-add mb-3">Add New Product</a>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Category</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product in products %}
-                <tr>
-                    <td>{{ product[0] }}</td>
-                    <td>{{ product[1] }}</td>
-                    <td>{{ product[2] }}</td>
-                    <td>{{ product[3] }}</td>
-                    <td>{{ product[4] }}</td>
-                    <td>{{ product[5] }}</td>
-                    <td>{{ product[6] }}</td>
-                    <td>
-                        <a href="{{ url_for('edit_product', id=product[0]) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <!-- Trigger Modal for Delete -->
-                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-product-id="{{ product[0] }}" data-product-name="{{ product[1] }}">Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <!-- Content Section -->
+    <div class="container">
+        <h2 class="mb-4">Manage Products</h2>
+        <a href="{{ url_for('add_product') }}" class="btn btn-add mb-4">Add New Product</a>
+        
+        <!-- Products Table -->
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product[0] }}</td>
+                        <td>{{ product[1] }}</td>
+                        <td>{{ product[2] }}</td>
+                        <td>{{ product[3] }}</td>
+                        <td>{{ product[4] }}</td>
+                        <td>{{ product[5] }}</td>
+                        <td>{{ product[6] }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_product', id=product[0]) }}" class="btn btn-warning btn-sm btn-action">Edit</a>
+                            <button class="btn btn-danger btn-sm btn-action" data-bs-toggle="modal" data-bs-target="#deleteModal" data-product-id="{{ product[0] }}" data-product-name="{{ product[1] }}">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Delete Confirmation Modal -->
@@ -170,22 +200,22 @@
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Modal Script to Handle Delete -->
     <script>
         // Handle modal data
         const deleteModal = document.getElementById('deleteModal');
         deleteModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget; 
+            const button = event.relatedTarget;
             const productId = button.getAttribute('data-product-id');
             const productName = button.getAttribute('data-product-name');
 
             // Set product name in modal
-            const productNameElement = document.getElementById('productName');
-            productNameElement.textContent = productName;
+            document.getElementById('productName').textContent = productName;
 
             // Set delete link
-            const deleteLink = document.getElementById('deleteLink');
-            deleteLink.href = `/product/delete/${productId}`;
+            document.getElementById('deleteLink').href = `/product/delete/${productId}`;
         });
     </script>
+
 </body>
 </html>
