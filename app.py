@@ -47,7 +47,7 @@ def home():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
 
-    return render_template('home.html', name=session['name'], role=session['role'])
+    return render_template('index.html', name=session['name'], role=session['role'])
 
 # Logout route
 @app.route('/logout')
